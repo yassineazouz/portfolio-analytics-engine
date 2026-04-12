@@ -1,4 +1,7 @@
+import os
+
 from langchain_classic.tools import Tool
+from langchain_community.tools import TavilySearchResults
 from tools.database import lister_tous_les_clients, rechercher_client, rechercher_produit
 from tools.recommandation import recommander_produits
 from tools.text import formater_rapport, extraire_mots_cles, convertir_majuscules_minuscules, resumer_texte
@@ -67,8 +70,21 @@ tools = [
                      'Catégories : Informatique, Mobilier, Audio, Toutes. '
                      'Types : Standard, Premium, VIP.'),
 
-    
 ]
+
+
+def _construire_outil_tavily():
+     """Construit l'outil Tavily seulement si la clé API est disponible."""
+     api_key = os.getenv("TAVILY_API_KEY", "").strip()
+     if not api_key:
+          return None
+
+     outil = TavilySearchResults(max_results=5, tavily_api_key=api_key)
+     outil.description = (
+          "Recherche web en temps reel (actualites financieres, infos entreprises, tendances de marche). "
+          "A utiliser pour les questions ouvertes ou l'actualite recente non couverte par les autres outils."
+     )
+     return outil
 
 
 def creer_agent():
@@ -76,7 +92,6 @@ def creer_agent():
     from langchain_openai import ChatOpenAI
     from langchain_classic.agents import AgentExecutor, create_react_agent
     from langchain_classic import hub
-    import os
 
     # Initialisation du LLM
     llm = ChatOpenAI(
@@ -84,17 +99,23 @@ def creer_agent():
         temperature=0,           # 0 = déterministe (résultats reproductibles)
         openai_api_key=os.getenv('OPENAI_API_KEY')
     )
+
     # Chargement du prompt ReAct depuis le hub LangChain
     # Ce prompt enseigne au LLM le cycle Thought → Action → Observation
     prompt = hub.pull("hwchase17/react")
 
+    outils_agent = list(tools)
+    tavily_tool = _construire_outil_tavily()
+    if tavily_tool is not None:
+        outils_agent.append(tavily_tool)
+
     # Création de l'agent avec la stratégie ReAct
-    agent = create_react_agent(llm=llm, tools=tools, prompt=prompt)
+    agent = create_react_agent(llm=llm, tools=outils_agent, prompt=prompt)
 
     # Création de l'exécuteur
     agent_executor = AgentExecutor(
         agent=agent,
-        tools=tools,
+        tools=outils_agent,
         verbose=True,            # Affiche le raisonnement étape par étape
         max_iterations=10,       # Évite les boucles infinies
         handle_parsing_errors=True
