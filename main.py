@@ -71,6 +71,12 @@ SCENARIOS = {
         "Calcule mon portefeuille: AAPL:10|MSFT:5|TSLA:2. "
         "Donne la valeur de chaque ligne, la valeur totale et la variation globale du jour."
     ),
+    "10": (
+        "Scénario 10 – Calcul avancé via PythonREPLTool (B2)",
+        "Utilise l'outil Python pour trier ce portefeuille par valeur décroissante et donner des statistiques: "
+        "AAPL:10, MSFT:5, TSLA:2, GOOGL:3. "
+        "Calcule aussi la moyenne et l'écart type des quantités."
+    ),
 }
 
 
@@ -101,7 +107,7 @@ if __name__ == "__main__":
             print(f"\n>>> {titre}")
             interroger_agent(agent, question)
         else:
-            print(f"\n  Choix invalide '{choix}'. Entrez un numéro entre 1 et 9, ou 'quit'.")
+            print(f"\n  Choix invalide '{choix}'. Entrez un numéro entre 1 et 10, ou 'quit'.")
 
 
 
