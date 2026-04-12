@@ -98,8 +98,6 @@ def _construire_outil_python_repl() -> PythonREPLTool:
         "de données non couverts par les autres outils. "
         "Entrée : code Python valide sous forme de chaîne."
     )
-    # ATTENTION SECURITE : cet outil exécute du code arbitraire.
-    # Ne jamais utiliser en production sans sandbox.
     return python_repl
 
 
