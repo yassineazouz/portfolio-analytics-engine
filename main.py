@@ -66,6 +66,11 @@ SCENARIOS = {
         "2) Convertis 1000 USD en EUR. "
         "3) Si j'investis 5000€ à 7% pendant 10 ans, quel capital ?"
     ),
+    "9": (
+        "Scénario 9 – Calcul de portefeuille boursier (B1)",
+        "Calcule mon portefeuille: AAPL:10|MSFT:5|TSLA:2. "
+        "Donne la valeur de chaque ligne, la valeur totale et la variation globale du jour."
+    ),
 }
 
 
@@ -96,7 +101,7 @@ if __name__ == "__main__":
             print(f"\n>>> {titre}")
             interroger_agent(agent, question)
         else:
-            print(f"\n  Choix invalide '{choix}'. Entrez un numéro entre 1 et 8, ou 'quit'.")
+            print(f"\n  Choix invalide '{choix}'. Entrez un numéro entre 1 et 9, ou 'quit'.")
 
 
 

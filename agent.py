@@ -8,6 +8,7 @@ from tools.text import formater_rapport, extraire_mots_cles, convertir_majuscule
 from tools.finance import obtenir_cours_action, obtenir_cours_crypto
 from tools.api_publique import convertir_devise, obtenir_taux_du_jour
 from tools.calculs import calculer_tva, calculer_interets_composes, calculer_marge, calculer_mensualite_pret
+from tools.portefeuille import calculer_portefeuille
 
 tools = [
      
@@ -44,6 +45,11 @@ tools = [
     
     Tool(name='calculer_mensualite', func=calculer_mensualite_pret,
          description='Mensualité prêt. Entrée : capital,taux_annuel,mois ex 200000,3.5,240.'),
+
+    Tool(name='calculer_portefeuille', func=calculer_portefeuille,
+         description='Calcule la valeur d\'un portefeuille boursier avec cours réels. '
+                     'Entrée : SYMBOLE:QUANTITE|SYMBOLE:QUANTITE ex AAPL:10|MSFT:5|TSLA:2. '
+                     'Retourne la valeur de chaque ligne, la valeur totale et la variation globale du jour.'),
 
     # ── Outil 4 : API publique ────────────────────────────────────────
     
