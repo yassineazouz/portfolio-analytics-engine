@@ -18,9 +18,8 @@ def calculer_interets_composes(input_str: str) -> str:
     """Intérêts composés. Entrée : "capital,taux_annuel,duree_annees" """
     c, t, n = input_str.strip().split(',')
     capital, taux, duree = float(c), float(t), int(n)
-    capital_final = capital * ((1 + taux/100) ** duree)
-    return f"Capital final : {capital_final:,.2f}€ (gain : {capital_final-capital:,.2f}€)"
-
+    capital_final = capital * ((1 + taux / 100) ** duree)
+    return f"Capital final : {capital_final:,.2f}€ (gain : {capital_final - capital:,.2f}€)"
 
 def calculer_marge(input_str: str) -> str:
     """Marge commerciale. Entrée : "prix_vente,cout_achat" """
@@ -34,8 +33,6 @@ def calculer_marge(input_str: str) -> str:
 def calculer_mensualite_pret(input_str: str) -> str:
     """Mensualité de prêt. Entrée : "capital,taux_annuel,duree_mois" """
     c, t, d = input_str.strip().split(',')
-    K, r, n = float(c), float(t)/100/12, int(d)
-    M = K * (r * (1+r)**n) / ((1+r)**n - 1)
-    return f"Mensualité : {M:.2f}€/mois | Coût total : {M*n:,.2f}€"
-
-
+    K, r, n = float(c), float(t) / 100 / 12, int(d)
+    M = K * (r * (1 + r) ** n) / ((1 + r) ** n - 1)
+    return f"Mensualité : {M:.2f}€/mois | Coût total : {M * n:,.2f}€"

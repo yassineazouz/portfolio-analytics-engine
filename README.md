@@ -1,93 +1,97 @@
 # Portfolio Analytics Engine
 
-Agent financier base sur LangChain avec outils metier (base de donnees, finance, calculs, web search, portefeuille, Python REPL), interface CLI, interface Streamlit et API REST.
+Agent conversationnel financier basé sur LangChain et GPT-4o-mini. Il utilise des outils pour interroger une base de données, récupérer des cours boursiers réels, faire des calculs financiers, et bien plus.
 
-## 1) Prerequis
+## Prérequis
 
 - Python 3.10+
-- Un compte OpenAI (cle API)
-- Optionnel: un compte Tavily (cle API) pour la recherche web A3
+- Une clé API OpenAI
+- (Optionnel) Une clé API Tavily pour la recherche web
 
-## 2) Installation
+## Installation
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## 3) Configuration
+Créer un fichier `.env` à la racine :
 
-Creer un fichier `.env` a la racine du projet:
-
-```env
-OPENAI_API_KEY=...
-TAVILY_API_KEY=...
+```
+OPENAI_API_KEY=sk-...
+TAVILY_API_KEY=tvly-...   # optionnel
 ```
 
-Notes:
-- `OPENAI_API_KEY` est obligatoire.
-- `TAVILY_API_KEY` est optionnel (si absent, l'agent fonctionne sans outil web Tavily).
+## Lancement
 
-Le fichier `.env.example` est fourni sans cles reelles.
-
-## 4) Initialiser la base
-
-```bash
-python init_db.py
-```
-
-Cette commande cree `database.db` et insere les donnees initiales clients/produits.
-
-## 5) Lancer le projet
-
-### A) Mode CLI (menu scenarios)
+### Terminal interactif
 
 ```bash
 python main.py
 ```
 
-### B) Mode Streamlit (C1)
+11 scénarios sont disponibles via un menu numéroté.
+
+### Interface Streamlit
 
 ```bash
 streamlit run app.py
 ```
 
-Fonctionnalites UI:
-- Champ de saisie en bas
-- Historique de conversation
-- Sidebar avec outils disponibles
-- Bouton de reset conversation
-
-### C) Mode API REST (D1)
+### API REST
 
 ```bash
-python -m uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+uvicorn api:app --reload
 ```
 
-Healthcheck:
+Endpoint disponible : `POST http://localhost:8000/api/agent/query`
 
-```bash
-curl http://127.0.0.1:8000/health
+```json
+{
+  "query": "Quel est le cours de Apple ?"
+}
 ```
 
-Question agent:
+Santé de l'API : `GET http://localhost:8000/health`
 
-```bash
-curl -X POST http://127.0.0.1:8000/api/agent/query \
-	-H "Content-Type: application/json" \
-	-d '{"query":"Quel est le solde du client C001 ?"}'
+## Outils disponibles
+
+| Outil | Description |
+|---|---|
+| `rechercher_client` | Cherche un client par nom ou ID dans la base SQLite |
+| `rechercher_produit` | Cherche un produit par nom ou ID |
+| `lister_clients` | Liste tous les clients |
+| `cours_action` | Cours réel via yfinance (AAPL, MSFT, TSLA, LVMH, AIR, GOOGL) |
+| `cours_crypto` | Cours réel via yfinance (BTC, ETH, SOL) |
+| `calculer_portefeuille` | Valeur totale d'un portefeuille avec cours réels |
+| `calculer_tva` | Calcul TVA et prix TTC |
+| `calculer_interets` | Intérêts composés |
+| `calculer_marge` | Marge commerciale |
+| `calculer_mensualite` | Mensualité de prêt |
+| `convertir_devise` | Conversion de devises via API Frankfurter |
+| `resumer_texte` | Résumé et statistiques d'un texte |
+| `formater_rapport` | Mise en forme d'un rapport |
+| `extraire_mots_cles` | Extraction de mots-clés |
+| `recommander_produits` | Recommandations selon budget et type de compte |
+| `Python_REPL` | Exécution de code Python pour calculs avancés |
+| `TavilySearch` | Recherche web en temps réel (si clé disponible) |
+
+## Structure du projet
+
 ```
-
-## 6) Structure du projet
-
-```text
-agent.py                 # Construction de l'agent et outils
-main.py                  # Interface CLI menu scenarios
-app.py                   # Interface Streamlit
-api.py                   # API FastAPI (D1)
-init_db.py               # Initialisation SQLite
-tools/                   # Outils metier
-requirements.txt
-.env.example
+portfolio-analytics-engine/
+├── agent.py          # Définition des outils et création de l'agent
+├── app.py            # Interface Streamlit
+├── api.py            # API REST FastAPI
+├── main.py           # Menu interactif terminal
+├── init_db.py        # Initialisation de la base SQLite
+├── database.db       # Base SQLite (générée automatiquement)
+├── .env              # Clés API (à créer)
+└── tools/
+    ├── database.py       # Accès base de données
+    ├── finance.py        # Cours boursiers (yfinance)
+    ├── portefeuille.py   # Calcul de portefeuille
+    ├── calculs.py        # Calculs financiers
+    ├── api_publique.py   # API Frankfurter (devises)
+    ├── recommandation.py # Recommandations produits
+    └── text.py           # Traitement de texte
 ```

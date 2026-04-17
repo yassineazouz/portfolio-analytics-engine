@@ -1,6 +1,5 @@
-
-import os
 from dotenv import load_dotenv
+
 from agent import creer_agent, interroger_agent
 
 
@@ -67,44 +66,43 @@ SCENARIOS = {
         "3) Si j'investis 5000€ à 7% pendant 10 ans, quel capital ?"
     ),
     "9": (
-        "Scénario 9 – Calcul de portefeuille boursier ",
-        "Calcule mon portefeuille: AAPL:10|MSFT:5|TSLA:2. "
-        "Donne la valeur de chaque ligne, la valeur totale et la variation globale du jour."
+        "Scénario 9 – Portefeuille boursier",
+        "Calcule mon portefeuille : AAPL:10|MSFT:5|TSLA:2. "
+        "Donne la valeur de chaque ligne, la valeur totale et la variation globale du jour.",
     ),
     "10": (
-        "Scénario 10 – Calcul avancé via PythonREPLTool ",
-        "Utilise l'outil Python pour trier ce portefeuille par valeur décroissante et donner des statistiques: "
-        "AAPL:10, MSFT:5, TSLA:2, GOOGL:3. "
-        "Calcule aussi la moyenne et l'écart type des quantités."
+        "Scénario 10 – Python REPL",
+        "Utilise l'outil Python pour calculer la valeur de ce portefeuille : AAPL:10, MSFT:5, TSLA:2, GOOGL:3. "
+        "Trie les lignes par valeur décroissante et calcule la moyenne et l'écart type des quantités.",
     ),
     "11": (
-        "Scénario 11 – Mémoire conversationnelle ",
-        "Démo en 3 questions liées pour vérifier la conservation du contexte."
+        "Scénario 11 – Mémoire conversationnelle",
+        "Démo en 3 questions liées pour vérifier la conservation du contexte.",
     ),
 }
 
-
 C2_DEMO_QUESTIONS = [
-    "Donne-moi les infos du client Sophie Bernard",
-    "Quel produit lui recommandes-tu ?",
-    "Calcule le prix TTC et dis-moi si elle peut se le permettre",
+    "Donne-moi les infos du client Sophie Bernard.",
+    "Quel produit lui recommandes-tu en fonction de son type de compte ?",
+    "Calcule le prix TTC de ce produit et dis-moi si elle peut se le permettre avec son solde.",
 ]
 
 
 def afficher_menu():
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("        AGENT LANGCHAIN — MENU DES SCÉNARIOS")
-    print("="*60)
+    print("=" * 60)
     for num, (titre, _) in SCENARIOS.items():
         print(f"  {num}. {titre}")
     print("  quit — Quitter")
-    print("="*60)
+    print("=" * 60)
 
 
 if __name__ == "__main__":
+    initialiser_base()
     print("Initialisation de l'agent...")
     agent = creer_agent()
-    print("Agent prêt.")
+    print("Agent prêt.\n")
 
     while True:
         afficher_menu()
@@ -124,6 +122,3 @@ if __name__ == "__main__":
                 interroger_agent(agent, question)
         else:
             print(f"\n  Choix invalide '{choix}'. Entrez un numéro entre 1 et 11, ou 'quit'.")
-
-
-
